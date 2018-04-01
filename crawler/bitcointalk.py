@@ -83,10 +83,10 @@ def crawl_bitcointalk_board(board, locale, start_page=1):
 
 def crawl_bitcointalk():
     boards = [
-        ('korean', _settings['board']['korean']),
-        ('japanese', _settings['board']['japanese']),
-        ('chinese', _settings['board']['chinese']),
-        ('english', _settings['board']['english'])
+        ('korean', _settings['address']['korean']),
+        ('japanese', _settings['address']['japanese']),
+        ('chinese', _settings['address']['chinese']),
+        ('english', _settings['address']['english'])
     ]
 
     for (locale, url) in boards:
