@@ -54,30 +54,29 @@ def crawl_forum_posts(forum_url, page=1):
     return posts
 
 
-def crawl_8btc(news_page=None, forum_page=None):
-    # logging.info('Start crawling 8btc news...')
-    # page = news_page
-    # while True:
-    #     try:
-    #         logging.info('Requesting news page {page}..'.format(page=page))
-    #         posts = crawl_news(page)
-    #
-    #         logging.info('Saving news page {page}..'.format(page=page))
-    #         save_result(posts, 'chinese', '8btc')
-    #     except RequestException:
-    #         logging.info('Reached the end of pages of news')
-    #         break
-    #     except Exception:
-    #         logging.error('Failed to get news page {page}'.format(page=page))
-    #         continue
-    #     finally:
-    #         time.sleep(random.uniform(0.5, 1.0))
-    #         page += 1
-    #
-    # logging.info('Finished crawling 8btc news!')
+def crawl_8btc(news_page=1, forum_page=1):
+    logging.info('Start crawling 8btc news...')
+    page = news_page
+    while True:
+        try:
+            logging.info('Requesting news page {page}..'.format(page=page))
+            posts = crawl_news(page)
+
+            logging.info('Saving news page {page}..'.format(page=page))
+            save_result(posts, 'chinese', '8btc')
+
+            time.sleep(random.uniform(0.5, 1.0))
+            page += 1
+        except RequestException:
+            logging.info('Reached the end of pages of news')
+            break
+        except Exception:
+            logging.error('Failed to get news page {page}'.format(page=page))
+
+    logging.info('Finished crawling 8btc news!')
 
     logging.info('Start crawling 8btc forum...')
-    page = forum_page or 1
+    page = forum_page
     # forum max page is 1000
     while page <= 1000:
         try:
