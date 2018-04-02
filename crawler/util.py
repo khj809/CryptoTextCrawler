@@ -9,7 +9,7 @@ from .exceptions import *
 
 _settings = settings['common']
 
-regex_japanese = u'[\u4E00-\u9FFF|\u3040-\u309Fー|\u30A0-\u30FF]+'
+regex_japanese = u'[\u4E00-\u9FFF\u3040-\u309Fー\u30A0-\u30FF]+'
 regex_chinese = u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]+'
 regex_korean = u'[ㄱ-ㅎㅏ-ㅣ가-힣]+'
 
