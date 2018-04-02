@@ -22,7 +22,7 @@ def crawl_board_posts(board_url, page=1):
     for tr in trs:
         td = tr.find_all('td', {'class': ['windowbg3', 'windowbg']})
         link = td[0].span.a.attrs['href']
-        pages = math.ceil(int(td[1].text)/20)
+        pages = max(1, int(math.ceil(int(td[1].text)/20)))
         posts.append((link, pages))
 
     # check if this page is the last one
@@ -101,19 +101,19 @@ def crawl_bitcointalk_board(board, locale, start_page=1, end_page=-1):
     logging.info('Finished crawling {locale} board!'.format(locale=locale))
 
 
-def crawl_bitcointalk(options='korean:all,japanese:all,chinese:all,english:all'):
+def crawl_bitcointalk(options='korean_all,japanese_all,chinese_all,english_all'):
     options = list(map(lambda x: x.lower(), options.split(',')))
     boards = []
 
     for option in options:
-        [locale, pages] = option.split(':')
+        [locale, pages] = option.split('_')
         if locale not in ['korean', 'japanese', 'chinese', 'english']:
             logging.error('Invalid locale given: %s' % locale)
         else:
             if pages == 'all':
                 boards.append((locale, _settings['address'][locale], 1, -1))
             else:
-                [start_page, end_page] = list(map(lambda x: int(x), pages.split('-')))
+                [start_page, end_page] = list(map(lambda x: int(x), pages.split(':')))
                 boards.append((locale, _settings['address'][locale], start_page, end_page))
 
     for (locale, url, start_page, end_page) in boards:

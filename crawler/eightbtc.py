@@ -120,21 +120,21 @@ def crawl_8btc_forums(start_page=1, end_page=1000):
     logging.info('Finished crawling 8btc forums!')
 
 
-def crawl_8btc(options='news:all,forum:all'):
+def crawl_8btc(options='news_all,forum_all'):
     options = options.split(',')
     for option in options:
-        [target, pages] = option.split(':')
+        [target, pages] = option.split('_')
         if target == 'news':
             if pages == 'all':
                 start_page, end_page = 1, -1
             else:
-                [start_page, end_page] = list(map(lambda x: int(x), pages.split('-')))
+                [start_page, end_page] = list(map(lambda x: int(x), pages.split(':')))
             crawl_8btc_news(start_page, end_page)
         elif target == 'forum':
             if pages == 'all':
                 start_page, end_page = 1, -1
             else:
-                [start_page, end_page] = list(map(lambda x: int(x), pages.split('-')))
+                [start_page, end_page] = list(map(lambda x: int(x), pages.split(':')))
             crawl_8btc_forums(start_page, end_page)
         else:
             pass

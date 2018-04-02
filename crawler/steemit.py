@@ -93,9 +93,9 @@ def crawl_posts_in_tag(tag, count):
     logging.info('Finished crawling {crawled} posts among {total} posts'.format(crawled=num_crawled, total=count))
 
 
-def crawl_steemit(options='bitcoin:all,blockchain:all,cryptocurrency:all'):
+def crawl_steemit(options='bitcoin_all,blockchain_all,cryptocurrency_all'):
     options = options.split(',')
     for option in options:
-        [tag, count] = option.split(':')
+        [tag, count] = option.split('_')
         count = -1 if count == 'all' else int(count)
         crawl_posts_in_tag(tag, count)
