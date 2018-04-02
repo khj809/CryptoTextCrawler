@@ -15,12 +15,25 @@ regex_korean = u'[ㄱ-ㅎㅏ-ㅣ가-힣]+'
 
 
 def classify_locale(str):
-    if re.search(regex_chinese, str, re.U):
-        return 'chinese'
-    elif re.search(regex_japanese, str, re.U):
-        return 'japanese'
-    elif re.search(regex_korean, str, re.U):
+    k = c = j = e = 0
+    lines = str.split('\n')
+    for line in lines:
+        if re.search(regex_chinese, line, re.U):
+            c += 1
+        elif re.search(regex_japanese, line, re.U):
+            j += 1
+        elif re.search(regex_korean, line, re.U):
+            k += 1
+        else:
+            e += 1
+
+    max_locale = max(k,c,j,e)
+    if max_locale == k:
         return 'korean'
+    elif max_locale == c:
+        return 'chinese'
+    elif max_locale == j:
+        return 'japanese'
     else:
         return 'english'
 
