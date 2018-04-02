@@ -23,5 +23,5 @@ def crawl_5ch():
     logging.info('Start crawling 5ch threads...')
     threads = crawl_threads()
     logging.info('Saving result of 5ch data...')
-    save_result(threads, 'japanese', '5ch')
+    save_result(threads, '5ch', 'japanese')
     logging.info('Finished crawling 5ch threads!')

@@ -69,12 +69,12 @@ def crawl_posts_in_tag(tag, count):
                 if num_crawled+num_failed >= count:
                     break
 
-                header = '[{crawled}/{total}]'.format(crawled=num_crawled+1, total=count)
+                header = '[{tag}|{crawled}/{total}]'.format(tag=tag, crawled=num_crawled+1, total=count)
                 try:
                     logging.info('{header} Requesting post contents of {id}'.format(header=header, id=post['id']))
                     content = crawl_post_content(post['url'])
                     logging.info('{header} Saving post content of {id}'.format(header=header, id=post['id']))
-                    save_result(content, 'english', 'steemit_{tag}_{id}'.format(tag=tag, id=post['id']))
+                    save_result(content, 'steemit_{tag}_{id}'.format(tag=tag, id=post['id']))
 
                     num_crawled += 1
                 except Exception as e:

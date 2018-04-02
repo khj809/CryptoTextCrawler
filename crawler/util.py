@@ -9,6 +9,21 @@ from .exceptions import *
 
 _settings = settings['common']
 
+regex_japanese = u'[\u4E00-\u9FFF|\u3040-\u309Fー|\u30A0-\u30FF]+'
+regex_chinese = u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]+'
+regex_korean = u'[ㄱ-ㅎㅏ-ㅣ가-힣]+'
+
+
+def classify_locale(str):
+    if re.search(regex_chinese, str, re.U):
+        return 'chinese'
+    elif re.search(regex_japanese, str, re.U):
+        return 'japanese'
+    elif re.search(regex_korean, str, re.U):
+        return 'korean'
+    else:
+        return 'english'
+
 
 def get_session(is_mobile=True):
     s = requests.Session()
@@ -61,16 +76,20 @@ def _get_new_filename(path, prefix):
     return os.path.join(path, new_filename)
 
 
-def save_result(result, locale, file):
+def save_result(result, file, locale=None):
+    if isinstance(result, str):
+        result_string = result
+    elif isinstance(result, list):
+        result_string = '\n'.join(result)
+    else:
+        logging.error('Invalid file is given with type "%s"' % type(result).__name__)
+        return
+
+    locale = locale or classify_locale(result_string)
+
     save_path = _settings['result_path'][locale]
     # filename = _get_new_filename(save_path, prefix)
     filename = os.path.join(save_path, '%s.txt' % file)
 
     with open(filename, 'w', encoding='utf8') as f:
-        if isinstance(result, str):
-            f.write(result)
-        elif isinstance(result, list):
-            f.write('\n'.join(result))
-        else:
-            logging.error('Invalid file is given with type "%s"' % type(result).__name__)
-            pass
+        f.write(result_string)

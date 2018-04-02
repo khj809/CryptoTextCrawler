@@ -87,7 +87,7 @@ def crawl_bitcointalk_board(board, locale, start_page=1, end_page=-1):
 
                 if len(post_contents) != 0:
                     logging.info('{header} Saving post contents of {id}'.format(header=header, id=post_id))
-                    save_result(post_contents, locale, 'bitcointalk_%s' % post_id)
+                    save_result(post_contents, 'bitcointalk_%s' % post_id)
 
             if is_last or (end_page != -1 and page >= end_page):
                 break

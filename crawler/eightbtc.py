@@ -65,7 +65,7 @@ def crawl_8btc_news(start_page=1, end_page=-1):
             posts = crawl_news(page)
 
             logging.info('Saving news page {page}..'.format(page=page))
-            save_result(posts, 'chinese', '8btc_news_%04d' % page)
+            save_result(posts, '8btc_news_%04d' % page, 'chinese')
 
             time.sleep(random.uniform(0.5, 1.0))
             page += 1
@@ -109,7 +109,7 @@ def crawl_8btc_forums(start_page=1, end_page=1000):
 
                 if len(forum_contents) != 0:
                     logging.info('{header} Saving forum content of {id}'.format(header=header, id=forum_id))
-                    save_result(forum_contents, 'chinese', '8btc_forum_%d' % forum_id)
+                    save_result(forum_contents, '8btc_forum_%d' % forum_id, 'chinese')
 
             page += 1
 
