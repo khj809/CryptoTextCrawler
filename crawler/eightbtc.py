@@ -55,9 +55,8 @@ def crawl_forum_post(forum_url, page=1):
 
 
 def crawl_8btc_news(start_page=1, end_page=-1):
-    logging.info('Start crawling 8btc news...')
-    if end_page == -1:
-        end_page = 1000
+    end_page = 1000 if end_page == -1 else min(1000, end_page)
+    logging.info('Start crawling 8btc news from page {start} to {end}'.format(start=start_page, end=end_page))
 
     page = start_page
     while page <= end_page:
@@ -80,8 +79,9 @@ def crawl_8btc_news(start_page=1, end_page=-1):
 
 
 def crawl_8btc_forums(start_page=1, end_page=1000):
-    logging.info('Start crawling 8btc forum...')
-    end_page = min(1000, end_page)
+    end_page = 1000 if end_page == -1 else min(1000, end_page)
+    logging.info('Start crawling 8btc forum from page {start} to {end}'.format(start=start_page, end=end_page))
+
     page = start_page
     while page <= end_page:
         try:
