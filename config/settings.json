@@ -12,7 +12,10 @@
         }
     },
     "steemit": {
-        "address": "https://api.steemit.com",
+        "address": {
+            "api": "https://api.steemit.com",
+            "tag": "https://steemit.com/tags"
+        },
         "payload_list": {
             "jsonrpc": "2.0",
             "method": "call",

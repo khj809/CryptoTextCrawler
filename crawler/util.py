@@ -61,15 +61,16 @@ def _get_new_filename(path, prefix):
     return os.path.join(path, new_filename)
 
 
-def save_result(result, locale, prefix):
+def save_result(result, locale, file):
     save_path = _settings['result_path'][locale]
-    filename = _get_new_filename(save_path, prefix)
+    # filename = _get_new_filename(save_path, prefix)
+    filename = os.path.join(save_path, '%s.txt' % file)
 
     with open(filename, 'w', encoding='utf8') as f:
         if isinstance(result, str):
             f.write(result)
         elif isinstance(result, list):
-            for s in result:
-                f.write(s + '\n')
+            f.write('\n'.join(result))
         else:
+            logging.error('Invalid file is given with type "%s"' % type(result).__name__)
             pass
