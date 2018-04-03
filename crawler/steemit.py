@@ -63,7 +63,7 @@ def crawl_posts_in_tag(tag, count):
         count = min(count, crawl_post_count(tag))
 
     cur = get_cursor()
-    cur.execute('SELECT author, permlink FROM steemit ORDER BY id DESC LIMIT 1')
+    cur.execute('SELECT author, permlink FROM steemit WHERE tag=? ORDER BY id DESC LIMIT 1', (tag, ))
     results = cur.fetchall()
     if len(results) == 0:
         start_author = None
