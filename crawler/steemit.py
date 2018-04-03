@@ -70,10 +70,9 @@ def crawl_posts_in_tag(tag, count):
     cur.execute('SELECT COUNT(id) FROM steemit WHERE tag=?', (tag, ))
     count_crawled = cur.fetchone()[0]
 
-    logging.info('Start crawling {count} posts related to "{tag}" '.format(count=count, tag=tag) +
-                 'from author={author}, permlink={permlink}'.format(
-                     author=(start_author or 'None'), permlink=(start_permlink or 'None'))
-                 )
+    logging.info('Start crawling {count} posts related to "{tag}" from author={author}, permlink={permlink}'.format(
+                    count=(count if count != -1 else 'every'), tag=tag,
+                    author=(start_author or 'None'), permlink=(start_permlink or 'None')))
 
     crawled = 0
 
@@ -91,7 +90,7 @@ def crawl_posts_in_tag(tag, count):
             for discussion in discussions:
                 header = '[{tag}|{idx}]'.format(tag=tag, idx=count_crawled+crawled+1)
 
-                if crawled >= count:
+                if count != -1 and crawled >= count:
                     finished = True
                     break
 
