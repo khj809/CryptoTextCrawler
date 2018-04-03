@@ -26,9 +26,10 @@ def crawl_board_posts(board_url, page=1):
         posts.append((link, pages))
 
     # check if this page is the last one
-    next_page = bodyarea.find('td', {'class': 'middletext'}).find('a', text='»')
+    page_list = bodyarea.find('td', {'class': 'middletext'}).find_all('a', {'class': 'navPages'})
+    is_last = page > int(page_list[-1].text)
 
-    return posts, next_page is None
+    return posts, is_last
 
 
 def crawl_post(post_url, page=1):
