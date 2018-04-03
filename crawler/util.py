@@ -1,7 +1,8 @@
 import os
-import re
 import glob
 import requests
+import sqlite3
+import regex as re
 from bs4 import BeautifulSoup
 
 from config import settings
@@ -9,21 +10,23 @@ from .exceptions import *
 
 _settings = settings['common']
 
-regex_japanese = u'[\u4E00-\u9FFF\u3040-\u309Fー\u30A0-\u30FF]+'
-regex_chinese = u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]+'
-regex_korean = u'[ㄱ-ㅎㅏ-ㅣ가-힣]+'
+regex_japanese = r'[\p{Hiragana}\p{Katakana}]+'
+regex_chinese = r'[\p{InCJK_Unified_Ideographs}\p{InCJK_Unified_Ideographs_Extension_A}\p{InCJK_Compatibility}]+'
+regex_korean = r'[\p{InHangul_Compatibility_Jamo}\p{InHangul_Syllables}]+'
+
+conn = sqlite3.connect('crawler.db', isolation_level=None)
 
 
 def classify_locale(str):
     k = c = j = e = 0
     lines = str.split('\n')
     for line in lines:
-        if re.search(regex_chinese, line, re.U):
-            c += 1
+        if re.search(regex_korean, line, re.U):
+            k += 1
         elif re.search(regex_japanese, line, re.U):
             j += 1
-        elif re.search(regex_korean, line, re.U):
-            k += 1
+        elif re.search(regex_chinese, line, re.U):
+            c += 1
         else:
             e += 1
 
@@ -106,3 +109,9 @@ def save_result(result, file, locale=None):
 
     with open(filename, 'w', encoding='utf8') as f:
         f.write(result_string)
+
+
+def get_cursor():
+    return conn.cursor()
+
+

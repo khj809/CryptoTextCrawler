@@ -2,7 +2,7 @@ import logging
 import time
 import random
 import copy
-from crawler.util import get_json, get_soup, save_result
+from crawler.util import get_json, get_soup, save_result, get_cursor
 from config import settings
 
 _settings = settings['steemit']
@@ -49,21 +49,37 @@ def crawl_post_content(url):
     return posts
 
 
+def save_to_db(id, tag, author, permlink):
+    cur = get_cursor()
+    cur.execute('INSERT INTO steemit (post_id, tag, author, permlink) '
+                'VALUES (?, ?, ?, ?)',
+                (id, tag, author, permlink))
+
+
 def crawl_posts_in_tag(tag, count):
     if count == -1:
         count = crawl_post_count(tag)
     else:
         count = min(count, crawl_post_count(tag))
 
+    cur = get_cursor()
+    cur.execute('SELECT author, permlink FROM steemit ORDER BY id DESC LIMIT 1')
+    results = cur.fetchall()
+    if len(results) == 0:
+        start_author = None
+        start_permlink = None
+    else:
+        start_author = results[0][0]
+        start_permlink = results[0][1]
+
     logging.info('Start crawling {count} posts related to "{tag}"'.format(count=count, tag=tag))
 
-    start_author = None
-    start_permlink = None
     num_crawled = 0
     num_failed = 0
     while num_crawled+num_failed < count:
+        header = '[{tag}|{crawled}/{total}]'.format(tag=tag, crawled=num_crawled + 1, total=count)
         try:
-            logging.info('Getting next 20 posts..')
+            logging.info('{header} Getting next 20 posts..'.format(header=header))
             posts = crawl_post_list(tag, 20, start_author, start_permlink)
             for post in posts:
                 if num_crawled+num_failed >= count:
@@ -75,6 +91,7 @@ def crawl_posts_in_tag(tag, count):
                     content = crawl_post_content(post['url'])
                     logging.info('{header} Saving post content of {id}'.format(header=header, id=post['id']))
                     save_result(content, 'steemit_{tag}_{id}'.format(tag=tag, id=post['id']))
+                    save_to_db(post['id'], tag, post['author'], post['permlink'])
 
                     num_crawled += 1
                 except Exception as e:
@@ -88,7 +105,8 @@ def crawl_posts_in_tag(tag, count):
             start_permlink = posts[-1]['permlink']
 
         except:
-            logging.error('Failed to get post list. Will be retried..')
+            logging.error('{header} Failed to get post list. Will be retried..'.format(header=header))
+            time.sleep(random.uniform(1.5, 2.0))
 
     logging.info('Finished crawling {crawled} posts among {total} posts'.format(crawled=num_crawled, total=count))
 
