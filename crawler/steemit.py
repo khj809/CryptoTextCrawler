@@ -121,7 +121,11 @@ def crawl_posts_in_tag(tag, count):
     logging.info('Finished crawling {crawled} posts related to "{tag}"'.format(crawled=crawled, tag=tag))
 
 
-def crawl_steemit(options='bitcoin_all,blockchain_all,cryptocurrency_all'):
+def crawl_steemit(options='bitcoin_all,blockchain_all,cryptocurrency_all', refresh_db=False):
+    if refresh_db:
+        cur = get_cursor()
+        cur.execute('DELETE FROM steemit')
+
     options = options.split(',')
     for option in options:
         [tag, count] = option.split('_')
