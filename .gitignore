@@ -98,3 +98,6 @@ ENV/
 results/
 logs/
 .idea/
+
+# sqlite db
+*.db
