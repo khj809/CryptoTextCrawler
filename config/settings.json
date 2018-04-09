@@ -9,7 +9,8 @@
             "korean": "results/korean",
             "japanese": "results/japanese",
             "chinese": "results/chinese"
-        }
+        },
+        "database": "crawler.db"
     },
     "steemit": {
         "address": {

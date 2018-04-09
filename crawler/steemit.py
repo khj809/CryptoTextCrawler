@@ -2,7 +2,8 @@ import logging
 import time
 import random
 import copy
-from crawler.util import get_json, get_soup, save_result, get_cursor
+from .utils.request import get_json, get_soup
+from .utils.data import save_result, get_cursor
 from config import settings
 
 _settings = settings['steemit']

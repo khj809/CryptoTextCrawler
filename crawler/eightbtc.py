@@ -2,7 +2,8 @@ import re
 import logging
 import time
 import random
-from crawler.util import get_soup, save_result
+from .utils.request import get_soup
+from .utils.data import save_result
 from config import settings
 from .exceptions import RequestException, ElementNotFoundException
 

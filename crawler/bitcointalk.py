@@ -4,7 +4,8 @@ import logging
 import time
 import random
 from config import settings
-from crawler.util import get_soup, save_result
+from .utils.request import get_soup
+from .utils.data import save_result
 from .exceptions import ElementNotFoundException
 
 _settings = settings['bitcointalk']
